@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.dao.Bookdao">
+    <resultMap id="booksmap" type="Books">
+        <id column="book_id" property="bid"></id>
+        <result column="book_name" property="bname"></result>
+        <result column="Press" property="press"></result>
+        <result column="Publication_date" property="pubdate"></result>
+        <result column="money" property="money"></result>
+        <result column="author" property="author"></result>
+    </resultMap>
+    <insert id="insertBook" parameterType="Books">
+        insert into books values(null,#{bname},#{press},#{pubdate},#{money},#{author,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateBooks" parameterType="map">
+        update books set Publication_date=#{pdate,jdbcType=TIMESTAMP},book_name=#{bname,jdbcType=VARCHAR} where book_id=#{bid}
+    </update>
+    <delete id="deleteBook" parameterType="int" >
+      delete from books where book_id=#{id}
+    </delete>
+    <select id="selectBooklike" resultMap="booksmap">
+        select * from books where book_name like #{name}
+    </select>
+    <select id="selectBookavg" resultMap="booksmap">
+        select * from books where money>(select avg(money) from books)
+    </select>
+    <select id="findyeatBook" resultMap="booksmap">
+        select * from books where to_number(to_char(Publication_date,'yyyy')) between 2001 and 2019
+    </select>
+</mapper>

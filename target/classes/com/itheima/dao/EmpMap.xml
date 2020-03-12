@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.dao.Empdao">
+    <resultMap id="Empmap" type="com.itheima.domain.Emp">
+        <id property="epno" column="EMPNO"></id>
+        <result property="ename" column="ENAME"></result>
+        <result property="job" column="JOB"></result>
+        <result property="mgr" column="MGR"></result>
+        <result property="bir" column="HIREDATE"></result>
+        <result property="sal" column="SAL"></result>
+        <result property="comm" column="COMM"></result>
+        <result property="depo" column="DEPTNO"></result>
+    </resultMap>
+
+    <insert id="insertEmp" parameterType="Emp">
+        insert into EMP values(#{epno},#{ename,jdbcType=VARCHAR},#{job,jdbcType=VARCHAR},#{mgr},#{bir,jdbcType=TIMESTAMP},#{sal},#{comm},#{depo})
+        <selectKey  keyColumn="EMPNO" keyProperty="epno" resultType="int" order="AFTER" >
+            select sq.nextval from dual
+        </selectKey>
+    </insert>
+    <delete id="deleteEmp" parameterType="int">
+        delete from EMP where EMPNO=#{EID}
+    </delete>
+    <update id="UpdateEmp" parameterType="Emp">
+        update EMP set ENAME=#{ename},JOB=#{job,jdbcType=VARCHAR},MGR=#{mgr},SAL=#{sal},COMM=#{comm} WHERE EMPNO=#{epno}
+    </update>
+    <select id="getEmpByid" resultMap="Empmap" parameterType="int">
+        select * from EMP where EMPNO=#{eid}
+    </select>
+    <select id="findEmpAll" resultMap="Empmap">
+        select * from EMP
+    </select>
+    <select id="findEmpBysal" resultMap="Empmap">
+        select * from EMP where (SAL+COMM) between #{param1} and #{param2}
+    </select>
+</mapper>
